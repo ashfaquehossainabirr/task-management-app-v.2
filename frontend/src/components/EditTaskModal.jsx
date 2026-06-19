@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { useTasks } from "../context/TaskContext";
 
 export default function EditTaskModal({ task, closeModal }) {
@@ -14,12 +15,11 @@ export default function EditTaskModal({ task, closeModal }) {
 
   const submit = async (e) => {
     e.preventDefault();
-
     await updateTask(form);
     closeModal();
   };
 
-  return (
+  return createPortal(
     <div className="modal-overlay" onClick={closeModal}>
       <div
         className="modal-content"
@@ -33,7 +33,7 @@ export default function EditTaskModal({ task, closeModal }) {
         </div>
 
         <form className="task-form" onSubmit={submit}>
-          <label>Title:</label>
+          <label>Title</label>
           <input
             value={form.title}
             onChange={(e) =>
@@ -42,7 +42,7 @@ export default function EditTaskModal({ task, closeModal }) {
             required
           />
 
-          <label>Assigned to:</label>
+          <label>Assigned to</label>
           <input
             value={form.assignedTo}
             onChange={(e) =>
@@ -51,7 +51,7 @@ export default function EditTaskModal({ task, closeModal }) {
             required
           />
 
-          <label>Priority:</label>
+          <label>Priority</label>
           <select
             value={form.priority}
             onChange={(e) =>
@@ -63,7 +63,7 @@ export default function EditTaskModal({ task, closeModal }) {
             <option value="high">High</option>
           </select>
 
-          <label>Status:</label>
+          <label>Status</label>
           <select
             value={form.status}
             onChange={(e) =>
@@ -78,6 +78,7 @@ export default function EditTaskModal({ task, closeModal }) {
           <button type="submit">Save Changes</button>
         </form>
       </div>
-    </div>
+    </div>,
+    document.getElementById("modal-root")
   );
 }
