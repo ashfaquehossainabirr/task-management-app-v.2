@@ -3,6 +3,7 @@ import { useTasks } from "../context/TaskContext";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
 import { useAuth } from "../context/AuthContext";
+import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
   const { tasks } = useTasks();
@@ -53,9 +54,12 @@ export default function AdminDashboard() {
                 <h3>📭 No assigned tasks</h3>
                 <p>Please wait until admin assigns you a task.</p>
               </div>
-            ) : tasks.map((task) => (
-        <TaskCard key={task.id} task={task} />
-      ))}
+            ) : <div className="task-grid">
+                  {tasks.map((task) => (
+                    <TaskCard key={task.id} task={task} />
+                  ))}
+                </div>
+        }
 
     </div>
   );
