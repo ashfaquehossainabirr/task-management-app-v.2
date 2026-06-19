@@ -1,6 +1,7 @@
 import { useTasks } from "../context/TaskContext";
 import { useAuth } from "../context/AuthContext";
 import TaskCard from "../components/TaskCard";
+import "./EmployeeDashboard.css";
 
 export default function EmployeeDashboard() {
   const { tasks } = useTasks();
@@ -26,12 +27,12 @@ export default function EmployeeDashboard() {
         <div className="no-task-box">
           <h3>📭 No assigned tasks</h3>
           <p>Please wait until admin assigns you a task.</p>
-        </div>
-      ) : (
-        assignedTasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
-        ))
-      )}
+        </div>) : (<div className="task-grid">
+                    {assignedTasks.map((task) => (
+                      <TaskCard key={task.id} task={task} />
+                    ))}
+                  </div>)
+      }
     </div>
   );
 }
