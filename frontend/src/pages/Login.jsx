@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import "./Login.css";
 
 export default function Login() {
   const { login } = useAuth();
@@ -10,8 +11,7 @@ export default function Login() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
-    const success = await login(name, password); // ✅ AWAIT
+    const success = await login(name, password);
 
     if (!success) {
       setError("Invalid name or password");
@@ -19,15 +19,14 @@ export default function Login() {
   };
 
   return (
-    <>
-      <h1 style={{ textAlign: "center", marginTop: 100 }}>
-        Task Management System
-      </h1>
+    <div className="login-page">
+      <h1 className="app-title">Task Management System</h1>
 
       <div className="login-box">
-        <h2>Login</h2>
+        <h2>Welcome Back 👋</h2>
+        <p className="subtitle">Please login to your account</p>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p className="error">{error}</p>}
 
         <form onSubmit={submitHandler}>
           <input
@@ -48,6 +47,6 @@ export default function Login() {
           <button type="submit">Login</button>
         </form>
       </div>
-    </>
+    </div>
   );
 }
