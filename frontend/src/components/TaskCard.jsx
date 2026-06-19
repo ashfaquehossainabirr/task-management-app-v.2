@@ -4,23 +4,21 @@ import { useState } from "react";
 import EditTaskModal from "./EditTaskModal";
 
 export default function TaskCard({ task }) {
-  const { updateTaskStatus } = useTasks();
-  const { updateTask, deleteTask } = useTasks();
+  const { updateTaskStatus, deleteTask } = useTasks();
   const { user } = useAuth();
   const [showEdit, setShowEdit] = useState(false);
+
+  const canEdit = user.role === "admin" || user.role === "manager";
 
   return (
     <div className="task-card">
       <h4>{task.title}</h4>
 
-      {/* Assigned user */}
-      {
-        user.role === "admin" && (
-          <p className="assigned-to">
-            <strong>Assigned to:</strong> {task.assignedTo}
-          </p>
-        )
-      }
+      {user.role !== "employee" && (
+        <p className="assigned-to">
+          <strong>Assigned to:</strong> {task.assignedTo}
+        </p>
+      )}
 
       <p className={`status-${task.status}`}>
         <strong>Status:</strong>{" "}
@@ -40,10 +38,12 @@ export default function TaskCard({ task }) {
         )}
       </p>
 
-      <p className={`priority-${task.priority}`}>Priority: {task.priority}</p>
+      <p className={`priority-${task.priority}`}>
+        Priority: {task.priority}
+      </p>
 
-      {/* Admin buttons */}
-      {user.role === "admin" || user.role === "manager" && (
+      {/* Admin + Manager only */}
+      {canEdit && (
         <div className="task-actions">
           <button className="edit-btn" onClick={() => setShowEdit(true)}>
             Edit
