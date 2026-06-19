@@ -43,7 +43,7 @@ export default function TaskCard({ task }) {
       <p className={`priority-${task.priority}`}>Priority: {task.priority}</p>
 
       {/* Admin buttons */}
-      {user.role === "admin" && (
+      {user.role === "admin" || user.role === "manager" && (
         <div className="task-actions">
           <button className="edit-btn" onClick={() => setShowEdit(true)}>
             Edit

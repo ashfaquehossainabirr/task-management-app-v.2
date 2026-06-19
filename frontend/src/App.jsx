@@ -11,9 +11,13 @@ function AppContent() {
     return <Login />;
   }
 
-  return user.role === "admin"
-    ? <AdminDashboard />
-    : <EmployeeDashboard />;
+  // Admin + Manager → Admin Dashboard
+  if (user.role === "admin" || user.role === "manager") {
+    return <AdminDashboard />;
+  }
+
+  // Employee → Employee Dashboard
+  return <EmployeeDashboard />;
 }
 
 export default function App() {

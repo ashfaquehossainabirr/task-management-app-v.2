@@ -3,12 +3,14 @@ import { useTasks } from "../context/TaskContext";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
 import { useAuth } from "../context/AuthContext";
+import RegisterUser from "../pages/RegisterUser";
 import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
   const { tasks } = useTasks();
   const { logout, user } = useAuth();
   const [showModal, setShowModal] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
   return (
     <div className="container">
@@ -24,6 +26,16 @@ export default function AdminDashboard() {
       <button className="add-task-btn" onClick={() => setShowModal(true)}>
         + Add Task
       </button>
+
+      {user.role === "manager" && (
+        <button
+          className="add-task-btn"
+          style={{ marginLeft: "10px" }}
+          onClick={() => setShowRegister(true)}
+        >
+          + Create User
+        </button>
+      )}
 
       {/* Modal */}
       {showModal && (
@@ -43,6 +55,21 @@ export default function AdminDashboard() {
             </div>
 
             <TaskForm closeModal={() => setShowModal(false)} />
+          </div>
+        </div>
+      )}
+
+      {showRegister && (
+        <div className="modal-overlay" onClick={() => setShowRegister(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Create User</h3>
+              <button className="close-btn" onClick={() => setShowRegister(false)}>
+                ✕
+              </button>
+            </div>
+
+            <RegisterUser closeModal={() => setShowRegister(false)} />
           </div>
         </div>
       )}
