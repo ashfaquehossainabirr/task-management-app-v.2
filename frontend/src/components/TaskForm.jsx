@@ -3,6 +3,7 @@ import { useTasks } from "../context/TaskContext";
 
 export default function TaskForm({ closeModal }) {
   const { addTask } = useTasks();
+
   const [form, setForm] = useState({
     title: "",
     assignedTo: "",
@@ -10,13 +11,27 @@ export default function TaskForm({ closeModal }) {
     priority: "medium",
   });
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    addTask(form);
-    setForm({ title: "", assignedTo: "", status: "todo", priority: "medium" });
 
-    // Close modal after submit
-    closeModal();
+    try {
+      await addTask(form);
+
+      setForm({
+        title: "",
+        assignedTo: "",
+        status: "todo",
+        priority: "medium",
+      });
+
+      closeModal();
+    } catch (error) {
+      if (error.response?.data?.message) {
+        alert(error.response.data.message);
+      } else {
+        alert("Failed to create task");
+      }
+    }
   };
 
   return (
@@ -31,7 +46,7 @@ export default function TaskForm({ closeModal }) {
 
       <label>Assign to:</label>
       <input
-        placeholder="Assign to"
+        placeholder="Assign to (exact username)"
         value={form.assignedTo}
         required
         onChange={(e) => setForm({ ...form, assignedTo: e.target.value })}
