@@ -15,8 +15,18 @@ export default function EditTaskModal({ task, closeModal }) {
 
   const submit = async (e) => {
     e.preventDefault();
-    await updateTask(form);
-    closeModal();
+
+    try {
+      await updateTask(form);
+
+      closeModal();
+    } catch (error) {
+      if (error.response?.data?.message) {
+        alert(error.response.data.message);
+      } else {
+        alert("Failed to update task");
+      }
+    }
   };
 
   return createPortal(
@@ -36,19 +46,19 @@ export default function EditTaskModal({ task, closeModal }) {
           <label>Title</label>
           <input
             value={form.title}
+            required
             onChange={(e) =>
               setForm({ ...form, title: e.target.value })
             }
-            required
           />
 
           <label>Assigned to</label>
           <input
             value={form.assignedTo}
+            required
             onChange={(e) =>
               setForm({ ...form, assignedTo: e.target.value })
             }
-            required
           />
 
           <label>Priority</label>
