@@ -41,22 +41,56 @@ router.post("/", async (req, res) => {
 
 // UPDATE STATUS
 router.patch("/:id", async (req, res) => {
-  const task = await Task.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true }
-  );
-  res.json(task);
+  try {
+    const { assignedTo } = req.body;
+
+    if (assignedTo) {
+      const userExists = await User.findOne({ name: assignedTo });
+
+      if (!userExists) {
+        return res.status(400).json({
+          message: "User not found",
+        });
+      }
+    }
+
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // EDIT TASK
 router.put("/:id", async (req, res) => {
-  const updatedTask = await Task.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true }
-  );
-  res.json(updatedTask);
+  try {
+    const { assignedTo } = req.body;
+
+    if (assignedTo) {
+      const userExists = await User.findOne({ name: assignedTo });
+
+      if (!userExists) {
+        return res.status(400).json({
+          message: "User not found",
+        });
+      }
+    }
+
+    const updatedTask = await Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(updatedTask);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // DELETE TASK
