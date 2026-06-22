@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 import { useTasks } from "../context/TaskContext";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
@@ -7,10 +9,45 @@ import RegisterUser from "../pages/RegisterUser";
 import "./AdminDashboard.css";
 
 export default function AdminDashboard() {
+  const [userCount, setUserCount] = useState(0);
+  const [taskCount, setTaskCount] = useState(0);
   const { tasks } = useTasks();
   const { logout, user } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const usersRes = await axios.get(
+          "https://task-management-app-v-2.onrender.com/api/stats/users",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const tasksRes = await axios.get(
+          "https://task-management-app-v-2.onrender.com/api/stats/tasks",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setUserCount(usersRes.data.count);
+        setTaskCount(tasksRes.data.count);
+      } catch (error) {
+        console.error("Failed to fetch stats", error);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     <div className="container">
@@ -20,6 +57,18 @@ export default function AdminDashboard() {
         <button className="logout-btn" onClick={logout}>
           Logout
         </button>
+      </div>
+
+      <div className="stats-container">
+        <div className="stat-card">
+          <h3>Total Users</h3>
+          <p>{userCount}</p>
+        </div>
+
+        <div className="stat-card">
+          <h3>Total Tasks</h3>
+          <p>{taskCount}</p>
+        </div>
       </div>
 
       {/* Open Modal Button */}
