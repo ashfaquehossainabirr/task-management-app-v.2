@@ -12,6 +12,20 @@ export default function EmployeeDashboard() {
     (task) => task.assignedTo === user.name
   );
 
+  const totalTasks = assignedTasks.length;
+
+  const todoTasks = assignedTasks.filter(
+    (task) => task.status === "todo"
+  ).length;
+
+  const inProgressTasks = assignedTasks.filter(
+    (task) => task.status === "in-progress"
+  ).length;
+
+  const doneTasks = assignedTasks.filter(
+    (task) => task.status === "done"
+  ).length;
+
   return (
     <div className="container">
       <div className="header">
@@ -20,6 +34,28 @@ export default function EmployeeDashboard() {
         <button className="logout-btn" onClick={logout}>
           Logout
         </button>
+      </div>
+
+      <div className="stats-container">
+        <div className="stat-card">
+          <h3>Total Tasks</h3>
+          <p>{totalTasks}</p>
+        </div>
+
+        <div className="stat-card">
+          <h3>To-Do</h3>
+          <p>{todoTasks}</p>
+        </div>
+
+        <div className="stat-card">
+          <h3>In Progress</h3>
+          <p>{inProgressTasks}</p>
+        </div>
+
+        <div className="stat-card">
+          <h3>Done</h3>
+          <p>{doneTasks}</p>
+        </div>
       </div>
 
       {/* No tasks message */}
