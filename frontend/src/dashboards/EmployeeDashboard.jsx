@@ -42,17 +42,17 @@ export default function EmployeeDashboard() {
           <p>{totalTasks}</p>
         </div>
 
-        <div className="stat-card">
+        <div className="stat-card todo">
           <h3>To-Do</h3>
           <p>{todoTasks}</p>
         </div>
 
-        <div className="stat-card">
+        <div className="stat-card in-progress">
           <h3>In Progress</h3>
           <p>{inProgressTasks}</p>
         </div>
 
-        <div className="stat-card">
+        <div className="stat-card done">
           <h3>Done</h3>
           <p>{doneTasks}</p>
         </div>
