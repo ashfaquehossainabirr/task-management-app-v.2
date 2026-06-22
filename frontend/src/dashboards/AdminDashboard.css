@@ -176,6 +176,18 @@
   color: #333;
 }
 
+.stat-card.todo {
+  border-left: 5px solid orange;
+}
+
+.stat-card.in-progress {
+  border-left: 5px solid blue;
+}
+
+.stat-card.done {
+  border-left: 5px solid green;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 600px) {
   .header {

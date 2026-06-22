@@ -49,6 +49,18 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
+  const todoCount = tasks.filter(
+    (task) => task.status === "todo"
+  ).length;
+
+  const inProgressCount = tasks.filter(
+    (task) => task.status === "in-progress"
+  ).length;
+
+  const doneCount = tasks.filter(
+    (task) => task.status === "done"
+  ).length;
+
   return (
     <div className="container">
       <div className="header">
@@ -68,6 +80,21 @@ export default function AdminDashboard() {
         <div className="stat-card">
           <h3>Total Tasks</h3>
           <p>{taskCount}</p>
+        </div>
+
+        <div className="stat-card todo">
+          <h3>To-Do Tasks</h3>
+          <p>{todoCount}</p>
+        </div>
+
+        <div className="stat-card in-progress">
+          <h3>In-Progress Tasks</h3>
+          <p>{inProgressCount}</p>
+        </div>
+
+        <div className="stat-card done">
+          <h3>Done Tasks</h3>
+          <p>{doneCount}</p>
         </div>
       </div>
 
