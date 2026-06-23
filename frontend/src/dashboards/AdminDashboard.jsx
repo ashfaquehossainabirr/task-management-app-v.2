@@ -19,31 +19,43 @@ import "./AdminDashboard.css";
 
 const centerTextPlugin = {
   id: "centerText",
-  beforeDraw: (chart) => {
-    const { ctx, width, height } = chart;
+  afterDraw(chart) {
+    const { ctx, chartArea, data } = chart;
+
+    if (!chartArea) return;
+
+    const { width, height } = chart;
+    const dataset = data.datasets[0];
+
+    const total = dataset.data.reduce((a, b) => a + b, 0);
+    const done = dataset.data[0];
+    const finalPercent = total ? (done / total) * 100 : 0;
+
+    // Animation progress (0 → 1)
+    const progress = chart.getDatasetMeta(0).controller._animations?.animateRotate?._active
+      ? chart.getDatasetMeta(0).controller._animations.animateRotate._progress
+      : 1;
+
+    const animatedPercent = Math.round(finalPercent * progress);
 
     ctx.save();
 
-    const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-    const done = chart.data.datasets[0].data[0];
-    const percent = total ? Math.round((done / total) * 100) : 0;
-
-    // Main percentage
-    ctx.font = "700 40px Inter";
+    // Main animated percentage
+    ctx.font = "700 42px Inter";
     ctx.fillStyle = "#111827";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(`${percent}%`, width / 2, height / 2 - 10);
+    ctx.fillText(`${animatedPercent}%`, width / 2, height / 2 - 10);
 
     // Sub text
     ctx.font = "500 14px Inter";
     ctx.fillStyle = "#6b7280";
     ctx.fillText("Completed", width / 2, height / 2 + 22);
 
-    // Small total text
+    // Total tasks
     ctx.font = "400 12px Inter";
     ctx.fillStyle = "#9ca3af";
-    ctx.fillText(`Total: ${total}`, width / 2, height / 2 + 45);
+    ctx.fillText(`Total: ${total}`, width / 2, height / 2 + 44);
 
     ctx.restore();
   },
@@ -180,56 +192,62 @@ export default function AdminDashboard() {
         </button>
       </div>
 
-      <div className="stats-container">
-        <div className="stat-card">
-          <h3>Total Users</h3>
-          <p>{userCount}</p>
+      <section className="dashboard-section">
+        <div className="stats-container">
+          <div className="stat-card">
+            <h3>Total Users</h3>
+            <p>{userCount}</p>
+          </div>
+
+          <div className="stat-card">
+            <h3>Total Tasks</h3>
+            <p>{taskCount}</p>
+          </div>
+
+          <div className="stat-card todo">
+            <h3>To-Do Tasks</h3>
+            <p>{todoCount}</p>
+          </div>
+
+          <div className="stat-card in-progress">
+            <h3>In-Progress Tasks</h3>
+            <p>{inProgressCount}</p>
+          </div>
+
+          <div className="stat-card done">
+            <h3>Done Tasks</h3>
+            <p>{doneCount}</p>
+          </div>
         </div>
+      </section>
 
-        <div className="stat-card">
-          <h3>Total Tasks</h3>
-          <p>{taskCount}</p>
+      <section className="dashboard-section">
+        <div className="chart-container">
+          <h3>Task Completion</h3>
+          <Doughnut
+            data={taskChartData}
+            options={chartOptions}
+            plugins={[centerTextPlugin]}
+          />
         </div>
+      </section>
 
-        <div className="stat-card todo">
-          <h3>To-Do Tasks</h3>
-          <p>{todoCount}</p>
-        </div>
-
-        <div className="stat-card in-progress">
-          <h3>In-Progress Tasks</h3>
-          <p>{inProgressCount}</p>
-        </div>
-
-        <div className="stat-card done">
-          <h3>Done Tasks</h3>
-          <p>{doneCount}</p>
-        </div>
-      </div>
-
-      <div className="chart-container">
-        <h3>Task Completion</h3>
-        <Doughnut
-          data={taskChartData}
-          options={chartOptions}
-          plugins={[centerTextPlugin]}
-        />
-      </div>
-
-      {/* Open Modal Button */}
-      <button className="add-task-btn" onClick={() => setShowModal(true)}>
-        + Add Task
-      </button>
-
-      {user.role === "manager" && (
-        <button
-          className="add-task-btn"
-          style={{ marginLeft: "10px" }}
-          onClick={() => setShowRegister(true)}
-        >
-          + Create User
+      <section className="dashboard-section">
+        {/* Open Modal Button */}
+        <button className="add-task-btn" onClick={() => setShowModal(true)}>
+          + Add Task
         </button>
-      )}
+
+        {user.role === "manager" && (
+          <button
+            className="add-task-btn"
+            style={{ marginLeft: "10px" }}
+            onClick={() => setShowRegister(true)}
+          >
+            + Create User
+          </button>
+        )}
+      </section>
 
       {/* Modal */}
       {showModal && (
@@ -269,18 +287,20 @@ export default function AdminDashboard() {
       )}
 
 
-      {/* Task List */}
-      { tasks.length === 0 ? (
-              <div className="no-task-box">
-                <h3>📭 No assigned tasks</h3>
-                <p>Please wait until admin assigns you a task.</p>
-              </div>
-            ) : <div className="task-grid">
-                  {tasks.map((task) => (
-                    <TaskCard key={task.id} task={task} />
-                  ))}
+      <section className="dashboard-section">
+        {/* Task List */}
+        { tasks.length === 0 ? (
+                <div className="no-task-box">
+                  <h3>📭 No assigned tasks</h3>
+                  <p>Please wait until admin assigns you a task.</p>
                 </div>
+              ) : <div className="task-grid">
+                    {tasks.map((task) => (
+                      <TaskCard key={task.id} task={task} />
+                    ))}
+                  </div>
         }
+      </section>
 
     </div>
   );

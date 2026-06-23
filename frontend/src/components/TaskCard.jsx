@@ -2,6 +2,7 @@ import { useTasks } from "../context/TaskContext";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import EditTaskModal from "./EditTaskModal";
+import "./TaskCard.css";
 
 export default function TaskCard({ task }) {
   const { updateTaskStatus, deleteTask } = useTasks();
