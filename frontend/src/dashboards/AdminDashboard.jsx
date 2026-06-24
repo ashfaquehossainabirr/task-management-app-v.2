@@ -21,41 +21,42 @@ const centerTextPlugin = {
   id: "centerText",
   afterDraw(chart) {
     const { ctx, chartArea, data } = chart;
-
     if (!chartArea) return;
 
-    const { width, height } = chart;
-    const dataset = data.datasets[0];
+    const { left, right, top, bottom } = chartArea;
 
+    const centerX = (left + right) / 2;
+    const centerY = (top + bottom) / 2;
+
+    const dataset = data.datasets[0];
     const total = dataset.data.reduce((a, b) => a + b, 0);
     const done = dataset.data[0];
-    const finalPercent = total ? (done / total) * 100 : 0;
-
-    // Animation progress (0 → 1)
-    const progress = chart.getDatasetMeta(0).controller._animations?.animateRotate?._active
-      ? chart.getDatasetMeta(0).controller._animations.animateRotate._progress
-      : 1;
-
-    const animatedPercent = Math.round(finalPercent * progress);
+    const percent = total ? Math.round((done / total) * 100) : 0;
 
     ctx.save();
 
-    // Main animated percentage
-    ctx.font = "700 42px Inter";
+    /* =======================
+       Main Percentage
+    ======================= */
+    ctx.font = "700 40px Inter";
     ctx.fillStyle = "#111827";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(`${animatedPercent}%`, width / 2, height / 2 - 10);
+    ctx.fillText(`${percent}%`, centerX, centerY - 8);
 
-    // Sub text
+    /* =======================
+       Subtitle
+    ======================= */
     ctx.font = "500 14px Inter";
     ctx.fillStyle = "#6b7280";
-    ctx.fillText("Completed", width / 2, height / 2 + 22);
+    ctx.fillText("Completed", centerX, centerY + 18);
 
-    // Total tasks
+    /* =======================
+       Total Tasks
+    ======================= */
     ctx.font = "400 12px Inter";
     ctx.fillStyle = "#9ca3af";
-    ctx.fillText(`Total: ${total}`, width / 2, height / 2 + 44);
+    ctx.fillText(`Total: ${total}`, centerX, centerY + 36);
 
     ctx.restore();
   },
