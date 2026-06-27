@@ -301,7 +301,7 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      <section className="dashboard-section">
+      <section className="dashboard-section" style={{ marginTop: "24px" }}>
         <div className="employee-breakdown">
           <h3>Employee-wise Task Breakdown</h3>
 
