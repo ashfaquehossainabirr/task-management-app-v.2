@@ -421,7 +421,9 @@ export default function AdminDashboard() {
             )}
           </>
         ) : (
-          <p className="empty-text">👆 Click an employee to view tasks</p>
+          <div className="no-task-box">
+            <p className="empty-text">👆 Click an employee to view tasks</p>
+          </div>
         )}
       </section>
 
