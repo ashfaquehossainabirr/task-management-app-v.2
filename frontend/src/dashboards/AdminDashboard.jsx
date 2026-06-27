@@ -123,6 +123,10 @@ export default function AdminDashboard() {
     (task) => task.status !== "done"
   ).length;
 
+  const pendingTaskList = tasks.filter(
+    (task) => task.status === "todo" || task.status === "in-progress"
+  );
+
   const taskChartData = {
     labels: ["Done Tasks", "Pending Tasks"],
     datasets: [
@@ -223,13 +227,47 @@ export default function AdminDashboard() {
       </section>
 
       <section className="dashboard-section">
-        <div className="chart-container">
-          <h3>Task Completion</h3>
-          <Doughnut
-            data={taskChartData}
-            options={chartOptions}
-            plugins={[centerTextPlugin]}
-          />
+        <div className="chart-task-layout">
+
+          {/* LEFT: Doughnut Chart */}
+          <div className="chart-container">
+            <h3>Task Completion</h3>
+
+            <div className="chart-wrapper">
+              <Doughnut
+                data={taskChartData}
+                options={chartOptions}
+                plugins={[centerTextPlugin]}
+              />
+            </div>
+          </div>
+
+          {/* RIGHT: Pending Tasks */}
+          <div className="pending-task-panel">
+            <h3>Pending Tasks</h3>
+
+            {pendingTaskList.length === 0 ? (
+              <p className="empty-text">🎉 No pending tasks</p>
+            ) : (
+              <div className="pending-task-list">
+                {pendingTaskList.map((task) => (
+                  <div key={task._id} className="pending-task-item">
+                    <div>
+                      <h4>{task.title}</h4>
+                      <span className={`badge ${task.status}`}>
+                        {task.status === "todo" ? "To-Do" : "In-Progress"}
+                      </span>
+                    </div>
+
+                    <span className={`priority ${task.priority}`}>
+                      {task.priority}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
         </div>
       </section>
 
