@@ -243,6 +243,13 @@
   height: 330px;
 }
 
+/* Mobile chart height */
+@media (max-width: 600px) {
+  .chart-box {
+    height: 240px;
+  }
+}
+
 /* ===============================
    Task Panel
 ================================ */
@@ -266,6 +273,24 @@
   padding-right: 6px;
   max-height: 330px;
   overflow-y: auto;
+}
+
+@media (max-width: 600px) {
+  .employee-chart,
+  .employee-task-panel {
+    padding: 18px;
+  }
+
+  .employee-chart h3,
+  .employee-task-panel h3 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  canvas {
+    max-width: 100% !important;
+  }
 }
 
 /* ===============================
