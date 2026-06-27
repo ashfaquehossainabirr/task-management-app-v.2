@@ -69,6 +69,7 @@ export default function AdminDashboard() {
   const { logout, user } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -207,6 +208,14 @@ export default function AdminDashboard() {
 
     return acc;
   }, {});
+
+  const employees = [
+    ...new Set(tasks.map(task => task.assignedTo).filter(Boolean))
+  ];
+
+  const employeeTasks = selectedEmployee
+    ? tasks.filter(task => task.assignedTo === selectedEmployee)
+    : [];
 
   return (
     <div className="container">
@@ -380,8 +389,45 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      <div className="employee-panel">
+        <h3>Employees</h3>
+
+        <div className="employee-list">
+          {employees.map(emp => (
+            <button
+              key={emp}
+              className={`employee-btn ${selectedEmployee === emp ? "active" : ""}`}
+              onClick={() => setSelectedEmployee(emp)}
+            >
+              👤 {emp}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <section className="dashboard-section">
+        {selectedEmployee ? (
+          <>
+            <h3 style={{ marginBottom: "16px" }}>Tasks for {selectedEmployee}</h3>
+
+            {employeeTasks.length === 0 ? (
+              <p className="empty-text">No tasks assigned</p>
+            ) : (
+              <div className="task-grid">
+                {employeeTasks.map(task => (
+                  <TaskCard key={task._id} task={task} />
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <p className="empty-text">👆 Click an employee to view tasks</p>
+        )}
+      </section>
+
+      <section className="dashboard-section">
+        <h3 style={{ marginTop: "24px", marginBottom: "16px" }}>All Tasks</h3>
+
         {/* Task List */}
         { tasks.length === 0 ? (
                 <div className="no-task-box">

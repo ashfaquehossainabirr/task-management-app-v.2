@@ -510,7 +510,8 @@
   color: #6b7280;
   font-size: 14px;
   text-align: center;
-  margin-top: 40px;
+  margin-top: 24px;
+  margin-bottom: 24px;
 }
 
 /* ===============================
@@ -598,4 +599,51 @@
 .employee-stats .done {
   background: #ecfdf5;
   color: #16a34a;
+}
+
+.employee-panel {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  margin-bottom: 24px;
+}
+
+.employee-panel h3 {
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* FLEX ROW + WRAP */
+.employee-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.employee-panel .employee-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.employee-btn {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: none;
+  color: #000;
+  background: #f3f4f6;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+  white-space: nowrap;
+}
+
+.employee-btn:hover {
+  background: #e0e7ff;
+}
+
+.employee-btn.active {
+  background: #6366f1;
+  color: white;
 }
