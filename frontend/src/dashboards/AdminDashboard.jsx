@@ -393,11 +393,17 @@ export default function AdminDashboard() {
         <h3>Employees</h3>
 
         <div className="employee-list">
-          {employees.map(emp => (
+          {employees.map((emp) => (
             <button
               key={emp}
-              className={`employee-btn ${selectedEmployee === emp ? "active" : ""}`}
-              onClick={() => setSelectedEmployee(emp)}
+              className={`employee-btn ${
+                selectedEmployee === emp ? "active" : ""
+              }`}
+              onClick={() =>
+                setSelectedEmployee(
+                  selectedEmployee === emp ? null : emp
+                )
+              }
             >
               👤 {emp}
             </button>
