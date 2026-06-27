@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTasks } from "../context/TaskContext";
 import { useAuth } from "../context/AuthContext";
 import TaskCard from "../components/TaskCard";
@@ -12,6 +13,9 @@ import "./EmployeeDashboard.css";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+/* ===============================
+   Donut Center Text Plugin
+================================ */
 const centerTextPlugin = {
   id: "centerText",
   afterDraw(chart) {
@@ -19,7 +23,6 @@ const centerTextPlugin = {
     if (!chartArea) return;
 
     const { left, right, top, bottom } = chartArea;
-
     const centerX = (left + right) / 2;
     const centerY = (top + bottom) / 2;
 
@@ -29,19 +32,15 @@ const centerTextPlugin = {
     const percent = total ? Math.round((done / total) * 100) : 0;
 
     ctx.save();
-
-    /* Percentage */
     ctx.font = "700 36px Inter";
     ctx.fillStyle = "#111827";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(`${percent}%`, centerX, centerY - 8);
 
-    /* Label */
     ctx.font = "500 14px Inter";
     ctx.fillStyle = "#6b7280";
     ctx.fillText("Completed", centerX, centerY + 18);
-
     ctx.restore();
   },
 };
@@ -50,27 +49,40 @@ export default function EmployeeDashboard() {
   const { tasks } = useTasks();
   const { logout, user } = useAuth();
 
+  /* ===============================
+     Filter State
+  ================================ */
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  /* ===============================
+     Task Filtering
+  ================================ */
   const assignedTasks = tasks.filter(
     (task) => task.assignedTo === user.name
   );
 
-  const todoTasks = assignedTasks.filter(
-    (task) => task.status === "todo"
-  );
-
+  const todoTasks = assignedTasks.filter((t) => t.status === "todo");
   const inProgressTasks = assignedTasks.filter(
-    (task) => task.status === "in-progress"
+    (t) => t.status === "in-progress"
   );
+  const doneTasks = assignedTasks.filter((t) => t.status === "done");
 
-  const doneTasks = assignedTasks.filter(
-    (task) => task.status === "done"
-  );
+  const filteredTasks =
+    statusFilter === "all"
+      ? assignedTasks
+      : assignedTasks.filter((task) => task.status === statusFilter);
 
+  /* ===============================
+     Chart Data
+  ================================ */
   const chartData = {
     labels: ["Done", "Pending"],
     datasets: [
       {
-        data: [doneTasks.length, todoTasks.length + inProgressTasks.length],
+        data: [
+          doneTasks.length,
+          todoTasks.length + inProgressTasks.length,
+        ],
         backgroundColor: ["#22c55e", "#f59e0b"],
         borderWidth: 4,
       },
@@ -89,17 +101,23 @@ export default function EmployeeDashboard() {
 
   return (
     <div className="container">
+      {/* ===============================
+          Header
+      ================================ */}
       <div className="header">
-        <h2>Employee Dashboard</h2>
-        <p>Welcome, {user.name}</p>
+        <div>
+          <h2>Employee Dashboard</h2>
+          <p>Welcome, {user.name}</p>
+        </div>
         <button className="logout-btn" onClick={logout}>
           Logout
         </button>
       </div>
 
-      {/* ===== Chart + Task Section ===== */}
+      {/* ===============================
+          Chart + Pending Panel
+      ================================ */}
       <section className="employee-chart-layout">
-        {/* LEFT: Doughnut Chart */}
         <div className="employee-chart">
           <h3>Task Progress</h3>
           <div className="chart-box">
@@ -111,7 +129,6 @@ export default function EmployeeDashboard() {
           </div>
         </div>
 
-        {/* RIGHT: Todo & In Progress */}
         <div className="employee-task-panel">
           <h3>Pending Tasks</h3>
 
@@ -121,12 +138,10 @@ export default function EmployeeDashboard() {
             <div className="employee-task-list">
               {[...todoTasks, ...inProgressTasks].map((task) => (
                 <div key={task._id} className="employee-task-item">
-                  <div>
-                    <h4>{task.title}</h4>
-                    <span className={`badge ${task.status}`}>
-                      {task.status === "todo" ? "To-Do" : "In-Progress"}
-                    </span>
-                  </div>
+                  <h4>{task.title}</h4>
+                  <span className={`badge ${task.status}`}>
+                    {task.status === "todo" ? "To-Do" : "In-Progress"}
+                  </span>
                 </div>
               ))}
             </div>
@@ -134,16 +149,41 @@ export default function EmployeeDashboard() {
         </div>
       </section>
 
-      {/* ===== All Tasks ===== */}
-      {assignedTasks.length === 0 ? (
+      {/* ===============================
+          Filter Buttons
+      ================================ */}
+      <div className="task-filter-bar">
+        {["all", "todo", "in-progress", "done"].map((status) => (
+          <button
+            key={status}
+            className={`filter-btn ${
+              statusFilter === status ? "active" : ""
+            }`}
+            onClick={() => setStatusFilter(status)}
+          >
+            {status === "all"
+              ? "All"
+              : status === "todo"
+              ? "To-Do"
+              : status === "in-progress"
+              ? "In-Progress"
+              : "Done"}
+          </button>
+        ))}
+      </div>
+
+      {/* ===============================
+          Task Grid
+      ================================ */}
+      {filteredTasks.length === 0 ? (
         <div className="no-task-box">
-          <h3>📭 No assigned tasks</h3>
-          <p>Please wait until admin assigns you a task.</p>
+          <h3>📭 No tasks found</h3>
+          <p>No tasks for this filter.</p>
         </div>
       ) : (
         <div className="task-grid">
-          {assignedTasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+          {filteredTasks.map((task) => (
+            <TaskCard key={task._id} task={task} />
           ))}
         </div>
       )}
