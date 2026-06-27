@@ -521,3 +521,81 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ===============================
+   Employee Breakdown
+================================ */
+.employee-breakdown {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+.employee-breakdown h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+/* Grid */
+.employee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+/* Card */
+.employee-card {
+  background: linear-gradient(135deg, #f9fafb, #ffffff);
+  padding: 20px;
+  border-radius: 16px;
+  transition: 0.25s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.employee-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+}
+
+.employee-card h4 {
+  margin-bottom: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Stats */
+.employee-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.employee-stats span {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Status Colors */
+.employee-stats .todo {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.employee-stats .in-progress {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.employee-stats .done {
+  background: #ecfdf5;
+  color: #16a34a;
+}
