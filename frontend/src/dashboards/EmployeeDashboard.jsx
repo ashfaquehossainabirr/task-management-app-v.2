@@ -49,6 +49,8 @@ export default function EmployeeDashboard() {
   const { tasks } = useTasks();
   const { logout, user } = useAuth();
 
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
   /* ===============================
      Filter State
   ================================ */
@@ -118,7 +120,10 @@ export default function EmployeeDashboard() {
           </div>
         </div>
 
-        <button className="logout-btn" onClick={logout}>
+        <button
+          className="logout-btn"
+          onClick={() => setShowLogoutConfirm(true)}
+        >
           Logout
         </button>
       </div>
@@ -194,6 +199,41 @@ export default function EmployeeDashboard() {
           {filteredTasks.map((task) => (
             <TaskCard key={task._id} task={task} />
           ))}
+        </div>
+      )}
+
+
+      {showLogoutConfirm && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowLogoutConfirm(false)}
+        >
+          <div
+            className="modal-content confirm-logout"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to logout?</p>
+
+            <div className="confirm-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => setShowLogoutConfirm(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="confirm-btn"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  logout();
+                }}
+              >
+                Yes, Logout
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

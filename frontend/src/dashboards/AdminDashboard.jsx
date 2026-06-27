@@ -70,6 +70,7 @@ export default function AdminDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -236,7 +237,10 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <button className="logout-btn" onClick={logout}>
+        <button
+          className="logout-btn"
+          onClick={() => setShowLogoutConfirm(true)}
+        >
           Logout
         </button>
       </div>
@@ -464,6 +468,40 @@ export default function AdminDashboard() {
         }
       </section>
 
+
+      {showLogoutConfirm && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowLogoutConfirm(false)}
+        >
+          <div
+            className="modal-content confirm-logout"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to logout?</p>
+
+            <div className="confirm-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => setShowLogoutConfirm(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="confirm-btn"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  logout();
+                }}
+              >
+                Yes, Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
