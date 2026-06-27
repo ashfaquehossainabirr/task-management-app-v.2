@@ -105,10 +105,19 @@ export default function EmployeeDashboard() {
           Header
       ================================ */}
       <div className="header">
-        <div>
-          <h2>Employee Dashboard</h2>
-          <p>Welcome, {user.name}</p>
+        <div className="header-left">
+          <div className="avatar">
+            {user.name.charAt(0).toUpperCase()}
+          </div>
+
+          <div className="header-text">
+            <h2>Employee Dashboard</h2>
+            <p>
+              Welcome back, <span>{user.name}</span>
+            </p>
+          </div>
         </div>
+
         <button className="logout-btn" onClick={logout}>
           Logout
         </button>
