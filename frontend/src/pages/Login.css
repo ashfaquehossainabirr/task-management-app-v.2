@@ -121,3 +121,37 @@
     font-size: 26px;
   }
 }
+
+/* ===============================
+   Loading Button
+================================ */
+
+.login-box button:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+/* Button loading layout */
+.btn-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Spinner */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

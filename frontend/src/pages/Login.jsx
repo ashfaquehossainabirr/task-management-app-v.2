@@ -8,13 +8,18 @@ export default function Login() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+
     const success = await login(name, password);
 
     if (!success) {
       setError("Invalid name or password");
+      setLoading(false);
     }
   };
 
@@ -34,6 +39,7 @@ export default function Login() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            disabled={loading}
           />
 
           <input
@@ -42,9 +48,19 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={loading}
           />
 
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>
+            {loading ? (
+              <span className="btn-loading">
+                <span className="spinner" />
+                Logging in...
+              </span>
+            ) : (
+              "Login"
+            )}
+          </button>
         </form>
       </div>
     </div>
