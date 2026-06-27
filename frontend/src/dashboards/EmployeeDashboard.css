@@ -216,6 +216,13 @@
   margin-bottom: 40px;
 }
 
+/* Tablet & Mobile */
+@media (max-width: 900px) {
+  .employee-chart-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ===============================
    Chart Box
 ================================ */
