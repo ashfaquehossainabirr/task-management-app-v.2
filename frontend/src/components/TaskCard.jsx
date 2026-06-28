@@ -12,6 +12,11 @@ export default function TaskCard({ task }) {
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  const isOverdue =
+    task.deadline &&
+    new Date(task.deadline) < new Date() &&
+    task.status !== "done";
+
   const canEdit = user.role === "admin" || user.role === "manager";
 
   return (
@@ -21,6 +26,13 @@ export default function TaskCard({ task }) {
       {user.role !== "employee" && (
         <p className="assigned-to">
           <strong>Assigned to:</strong> {task.assignedTo}
+        </p>
+      )}
+
+      {task.deadline && (
+        <p className="task-deadline">
+          <strong>Deadline:</strong>{" "}
+          {new Date(task.deadline).toLocaleDateString()}
         </p>
       )}
 
@@ -41,10 +53,14 @@ export default function TaskCard({ task }) {
           task.status
         )}
       </p>
-
+      
       <p className={`priority-${task.priority}`}>
         Priority: {task.priority}
       </p>
+
+      {isOverdue && (
+        <span className="overdue-badge">⚠ Overdue</span>
+      )}
 
       {/* Admin + Manager only */}
       {canEdit && (

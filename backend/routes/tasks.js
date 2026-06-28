@@ -13,28 +13,31 @@ router.get("/", async (req, res) => {
 // CREATE TASK
 router.post("/", async (req, res) => {
   try {
-    const { title, description, assignedTo, priority } = req.body;
+    const { title, assignedTo, priority, deadline } = req.body;
 
-    // Check if assigned user exists
-    const userExists = await User.findOne({ name: assignedTo });
-
-    if (!userExists) {
+    if (!title || !assignedTo || !deadline) {
       return res.status(400).json({
-        message: "User not found",
+        message: "Title, assigned user, and deadline are required",
       });
     }
 
-    // Create task only if user exists
+    // Check if assigned user exists
+    const userExists = await User.findOne({ name: assignedTo });
+    if (!userExists) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
     const task = await Task.create({
       title,
-      description,
       assignedTo,
       priority,
+      deadline,
       status: "todo",
     });
 
     res.status(201).json(task);
   } catch (error) {
+    console.error("Create task error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -73,11 +76,8 @@ router.put("/:id", async (req, res) => {
 
     if (assignedTo) {
       const userExists = await User.findOne({ name: assignedTo });
-
       if (!userExists) {
-        return res.status(400).json({
-          message: "User not found",
-        });
+        return res.status(400).json({ message: "User not found" });
       }
     }
 
@@ -89,6 +89,7 @@ router.put("/:id", async (req, res) => {
 
     res.json(updatedTask);
   } catch (error) {
+    console.error("Edit task error:", error);
     res.status(500).json({ message: "Server error" });
   }
 });

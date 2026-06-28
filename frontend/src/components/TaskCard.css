@@ -161,6 +161,23 @@ select {
     margin-top: 10px;
 }
 
+.task-deadline {
+  font-size: 13px;
+  color: #374151;
+  margin-top: 6px;
+}
+
+.overdue-badge {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 8px;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 /* ===============================
    Responsive
 ================================ */

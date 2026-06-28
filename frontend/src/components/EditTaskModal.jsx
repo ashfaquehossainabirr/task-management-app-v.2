@@ -12,6 +12,9 @@ export default function EditTaskModal({ task, closeModal }) {
     assignedTo: task.assignedTo,
     status: task.status,
     priority: task.priority,
+    deadline: task.deadline
+      ? task.deadline.split("T")[0]
+      : "",
   });
 
   const submit = async (e) => {
@@ -85,6 +88,15 @@ export default function EditTaskModal({ task, closeModal }) {
             <option value="in-progress">In Progress</option>
             <option value="done">Done</option>
           </select>
+
+          <label>Deadline</label>
+          <input
+            type="date"
+            value={form.deadline}
+            onChange={(e) =>
+              setForm({ ...form, deadline: e.target.value })
+            }
+          />
 
           <button type="submit">Save Changes</button>
         </form>

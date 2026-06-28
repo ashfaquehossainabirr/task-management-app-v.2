@@ -10,6 +10,7 @@ export default function TaskForm({ closeModal }) {
     assignedTo: "",
     status: "todo",
     priority: "medium",
+    deadline: "",
   });
 
   const submit = async (e) => {
@@ -62,6 +63,15 @@ export default function TaskForm({ closeModal }) {
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
+
+      <label>Deadline:</label>
+      <input
+        type="date"
+        value={form.deadline}
+        onChange={(e) =>
+          setForm({ ...form, deadline: e.target.value })
+        }
+      />
 
       <button type="submit">Add Task</button>
     </form>
