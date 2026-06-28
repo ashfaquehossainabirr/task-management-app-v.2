@@ -2,12 +2,14 @@ import { useTasks } from "../context/TaskContext";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import EditTaskModal from "./EditTaskModal";
+import ConfirmModal from "./ConfirmModal";
 import "./TaskCard.css";
 
 export default function TaskCard({ task }) {
   const { updateTaskStatus, deleteTask } = useTasks();
   const { user } = useAuth();
   const [showEdit, setShowEdit] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const canEdit = user.role === "admin" || user.role === "manager";
 
@@ -52,11 +54,7 @@ export default function TaskCard({ task }) {
 
           <button
             className="logout-btn"
-            onClick={() => {
-              if (window.confirm("Delete this task?")) {
-                deleteTask(task._id);
-              }
-            }}
+            onClick={() => setShowDeleteConfirm(true)}
           >
             Delete
           </button>
@@ -67,6 +65,20 @@ export default function TaskCard({ task }) {
         <EditTaskModal
           task={task}
           closeModal={() => setShowEdit(false)}
+        />
+      )}
+
+      {showDeleteConfirm && (
+        <ConfirmModal
+          title="Delete Task?"
+          message={`Are you sure you want to delete "${task.title}"?`}
+          confirmText="Yes, Delete"
+          cancelText="Cancel"
+          onCancel={() => setShowDeleteConfirm(false)}
+          onConfirm={() => {
+            deleteTask(task._id);
+            setShowDeleteConfirm(false);
+          }}
         />
       )}
     </div>

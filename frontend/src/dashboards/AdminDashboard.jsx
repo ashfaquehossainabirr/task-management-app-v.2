@@ -462,7 +462,7 @@ export default function AdminDashboard() {
                 </div>
               ) : <div className="task-grid">
                     {tasks.map((task) => (
-                      <TaskCard key={task.id} task={task} />
+                      <TaskCard key={task._id} task={task} />
                     ))}
                   </div>
         }
