@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useTasks } from "../context/TaskContext";
+import toast from "react-hot-toast";
 
 export default function EditTaskModal({ task, closeModal }) {
   const { updateTask } = useTasks();
@@ -19,13 +20,13 @@ export default function EditTaskModal({ task, closeModal }) {
     try {
       await updateTask(form);
 
+      toast.success("Task updated successfully ✨");
+
       closeModal();
     } catch (error) {
-      if (error.response?.data?.message) {
-        alert(error.response.data.message);
-      } else {
-        alert("Failed to update task");
-      }
+      toast.error(
+        error.response?.data?.message || "Failed to update task ❌"
+      );
     }
   };
 
