@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTasks } from "../context/TaskContext";
+import toast from "react-hot-toast";
 
 export default function TaskForm({ closeModal }) {
   const { addTask } = useTasks();
@@ -17,6 +18,8 @@ export default function TaskForm({ closeModal }) {
     try {
       await addTask(form);
 
+      toast.success("Task added successfully ✅");
+
       setForm({
         title: "",
         assignedTo: "",
@@ -26,11 +29,9 @@ export default function TaskForm({ closeModal }) {
 
       closeModal();
     } catch (error) {
-      if (error.response?.data?.message) {
-        alert(error.response.data.message);
-      } else {
-        alert("Failed to create task");
-      }
+      toast.error(
+        error.response?.data?.message || "Failed to create task ❌"
+      );
     }
   };
 

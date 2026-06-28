@@ -1,6 +1,7 @@
 import { useTasks } from "../context/TaskContext";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import EditTaskModal from "./EditTaskModal";
 import ConfirmModal from "./ConfirmModal";
 import "./TaskCard.css";
@@ -75,9 +76,15 @@ export default function TaskCard({ task }) {
           confirmText="Yes, Delete"
           cancelText="Cancel"
           onCancel={() => setShowDeleteConfirm(false)}
-          onConfirm={() => {
-            deleteTask(task._id);
-            setShowDeleteConfirm(false);
+          onConfirm={async () => {
+            try {
+              await deleteTask(task._id);
+              toast.success("Task deleted successfully 🗑️");
+            } catch (err) {
+              toast.error("Failed to delete task ❌");
+            } finally {
+              setShowDeleteConfirm(false);
+            }
           }}
         />
       )}

@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { TaskProvider } from "./context/TaskContext";
 import AdminDashboard from "./dashboards/AdminDashboard";
@@ -22,10 +23,23 @@ function AppContent() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <TaskProvider>
-        <AppContent />
-      </TaskProvider>
-    </AuthProvider>
+    <>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            fontSize: "14px",
+            borderRadius: "10px",
+          },
+        }}
+      />
+      
+      <AuthProvider>
+        <TaskProvider>
+          <AppContent />
+        </TaskProvider>
+      </AuthProvider>
+    </>
   );
 }
