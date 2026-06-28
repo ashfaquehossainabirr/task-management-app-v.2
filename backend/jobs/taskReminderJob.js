@@ -31,10 +31,18 @@ export const startTaskReminderJob = () => {
           ? "⚠️ Task Overdue!"
           : "⏰ Task Deadline Reminder",
         html: `
-          <h2>${isOverdue ? "Overdue Task" : "Upcoming Deadline"}</h2>
-          <p><b>Task:</b> ${task.title}</p>
-          <p><b>Deadline:</b> ${task.deadline.toDateString()}</p>
-          <p>Status: ${task.status}</p>
+            <p style="color: dodgerblue; font-size: 18px; font-weight: bold;">Hello, ${task.assignedTo}</p>
+            <p style="color: dodgerblue; font-size: 18px; font-weight: bold; margin-bottom: 24px;">This is a reminder for your assigned task.</p>
+            
+            <h2>${isOverdue ? "Overdue Task" : "Upcoming Deadline"}</h2>
+            <p><b>Task:</b> ${task.title}</p>
+            <p><b>Deadline:</b> ${task.deadline.toDateString()}</p>
+            <p>Status: ${task.status}</p>
+            
+            <br/>
+            <p>Please log in to your dashboard for details.</p>
+            <p>— Task Manager Team</p>
+
         `,
       });
     }
