@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 
+import { startTaskReminderJob } from "./jobs/taskReminderJob.js";
+
 import authRoutes from "./routes/auth.js";
 import taskRoutes from "./routes/tasks.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -44,6 +46,10 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.error(err));
+
+
+// START CRON JOB
+startTaskReminderJob();
 
 /* ======================
    SERVER
