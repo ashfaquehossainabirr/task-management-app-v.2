@@ -135,7 +135,7 @@
 
 /* Edit button */
 .edit-btn {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
   color: white;
   border: none;
   padding: 8px 14px;
@@ -154,6 +154,7 @@
 /* Delete button (reuse logout style but smaller) */
 .task-actions .logout-btn {
   padding: 8px 14px;
+  border-radius: 10px;
   font-size: 13px;
 }
 
