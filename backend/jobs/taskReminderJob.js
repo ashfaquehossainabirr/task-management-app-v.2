@@ -6,7 +6,7 @@ import { sendEmail } from "../utils/sendEmail.js";
 export const startTaskReminderJob = () => {
   // Runs every day at 10 AM
   cron.schedule(
-  "00 10 * * *",
+  "25 12 * * *",
   async () => {
     console.log("⏰ Running task reminder job.");
 
