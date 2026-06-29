@@ -19,6 +19,25 @@ export default function TaskCard({ task }) {
 
   const canEdit = user.role === "admin" || user.role === "manager";
 
+  const getRemainingDays = (deadline) => {
+    if (!deadline) return null;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const due = new Date(deadline);
+    due.setHours(0, 0, 0, 0);
+
+    const diffTime = due - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return "⏰ Due today";
+    if (diffDays === 1) return "⏳ 1 day left";
+    if (diffDays > 1) return `⏳ ${diffDays} days left`;
+
+    return `⚠ Overdue by ${Math.abs(diffDays)} days`;
+  };
+
   return (
     <div className="task-card">
       <h4>{task.title}</h4>
@@ -33,6 +52,10 @@ export default function TaskCard({ task }) {
         <p className="task-deadline">
           <strong>Deadline:</strong>{" "}
           {new Date(task.deadline).toLocaleDateString("en-GB")}
+          <br />
+          <span className="remaining-days">
+            {getRemainingDays(task.deadline)}
+          </span>
         </p>
       )}
 

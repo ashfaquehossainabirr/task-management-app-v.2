@@ -178,6 +178,18 @@ select {
   font-weight: 600;
 }
 
+.remaining-days {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.remaining-days:has(:contains("Overdue")) {
+  color: #dc2626;
+}
+
 /* ===============================
    Responsive
 ================================ */
