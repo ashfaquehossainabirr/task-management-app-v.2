@@ -32,7 +32,7 @@ export default function TaskCard({ task }) {
       {task.deadline && (
         <p className="task-deadline">
           <strong>Deadline:</strong>{" "}
-          {new Date(task.deadline).toLocaleDateString()}
+          {new Date(task.deadline).toLocaleDateString("en-GB")}
         </p>
       )}
 

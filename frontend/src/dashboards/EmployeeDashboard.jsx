@@ -45,6 +45,18 @@ const centerTextPlugin = {
   },
 };
 
+const daysUntilDeadline = (deadline) => {
+  const today = new Date();
+  const due = new Date(deadline);
+
+  // Remove time difference issues
+  today.setHours(0, 0, 0, 0);
+  due.setHours(0, 0, 0, 0);
+
+  const diffTime = due - today;
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+};
+
 export default function EmployeeDashboard() {
   const { tasks } = useTasks();
   const { logout, user } = useAuth();
@@ -73,6 +85,13 @@ export default function EmployeeDashboard() {
     statusFilter === "all"
       ? assignedTasks
       : assignedTasks.filter((task) => task.status === statusFilter);
+
+  const urgentTasks = assignedTasks.filter((task) => {
+    if (!task.deadline) return false;
+
+    const daysLeft = daysUntilDeadline(task.deadline);
+    return daysLeft >= 0 && daysLeft <= 3 && task.status !== "done";
+  });
 
   /* ===============================
      Chart Data
@@ -162,6 +181,36 @@ export default function EmployeeDashboard() {
           )}
         </div>
       </section>
+
+      {/* ===============================
+          Upcoming Deadlines
+      ================================ */}
+      {urgentTasks.length > 0 && (
+        <section className="urgent-task-section">
+          <h3>⚠ Upcoming Deadlines (Next 3 Days)</h3>
+
+          <div className="urgent-task-list">
+            {urgentTasks.map((task) => {
+              const daysLeft = daysUntilDeadline(task.deadline);
+
+              return (
+                <div key={task._id} className="urgent-task-card">
+                  <div>
+                    <h4>{task.title}</h4>
+                    <p className="urgent-deadline">
+                      ⏰ {daysLeft === 0 ? "Due Today" : `Due in ${daysLeft} day(s)`}
+                    </p>
+                  </div>
+
+                  <span className={`badge ${task.status}`}>
+                    {task.status}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {/* ===============================
           Filter Buttons

@@ -756,3 +756,26 @@
 .confirm-btn:hover {
   background: linear-gradient(135deg, #ff4d4f, #ff4d4f);
 }
+
+/* Upcoming Deadline Task Card */
+.employee-stats > div {
+  margin-bottom: 8px;
+}
+
+/* Custom scrollbar for deadline tasks */
+.deadline-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.deadline-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.deadline-list::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.deadline-list::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
