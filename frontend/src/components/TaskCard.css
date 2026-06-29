@@ -191,6 +191,25 @@ select {
 }
 
 /* ===============================
+   Deadline States
+================================ */
+
+/* Warning: < 3 days */
+.task-card.warning::before {
+  background: #facc15;
+}
+
+/* Due today / tomorrow */
+.task-card.urgent::before {
+  background: #ef4444;
+}
+
+/* Overdue */
+.task-card.overdue::before {
+  background: #b91c1c;
+}
+
+/* ===============================
    Responsive
 ================================ */
 @media (max-width: 480px) {

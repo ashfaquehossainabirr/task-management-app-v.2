@@ -38,8 +38,28 @@ export default function TaskCard({ task }) {
     return `⚠ Overdue by ${Math.abs(diffDays)} days`;
   };
 
+  const getDeadlineUrgency = (deadline) => {
+    if (!deadline) return "normal";
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const due = new Date(deadline);
+    due.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.ceil(
+      (due - today) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffDays < 0) return "overdue";
+    if (diffDays <= 1) return "urgent";
+    if (diffDays < 3) return "warning";
+
+    return "normal";
+  };
+
   return (
-    <div className="task-card">
+    <div className={`task-card ${getDeadlineUrgency(task.deadline)}`}>
       <h4>{task.title}</h4>
 
       {user.role !== "employee" && (
