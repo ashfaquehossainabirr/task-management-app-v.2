@@ -605,17 +605,67 @@
   gap: 20px;
 }
 
+/* Task Breakdown */
+.task-breakdown {
+  max-height: 385px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* Custom scrollbar for task breakdown */
+.task-breakdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.task-breakdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.task-breakdown::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.task-breakdown::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Due Tasks */
+.due-task {
+  max-height: 432px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* Custom scrollbar for task breakdown */
+.due-task::-webkit-scrollbar {
+  width: 6px;
+}
+
+.due-task::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.due-task::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.due-task::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
 /* Card */
 .employee-card {
-  background: linear-gradient(135deg, #f9fafb, #ffffff);
+  background: linear-gradient(135deg, #f9fafb, hsl(0, 0%, 99%));
   padding: 20px;
   border-radius: 16px;
   transition: 0.25s ease;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  /* box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); */
+  border: 1px solid #c7e3ff;
 }
 
 .employee-card:hover {
-  transform: translateY(-3px);
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
 }
 

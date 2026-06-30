@@ -373,7 +373,7 @@ export default function AdminDashboard() {
           {Object.keys(employeeTaskMap).length === 0 ? (
             <p className="empty-text">No task data available</p>
           ) : (
-            <div className="employee-grid">
+            <div className="employee-grid task-breakdown">
               {Object.entries(employeeTaskMap).map(
                 ([employee, stats]) => (
                   <div key={employee} className="employee-card">
@@ -409,7 +409,7 @@ export default function AdminDashboard() {
               <p className="empty-text">🎉 No urgent deadlines</p>
             </div>
           ) : (
-            <div className="employee-grid">
+            <div className="employee-grid due-task">
               {Object.entries(upcomingTasksByEmployee).map(
                 ([employee, tasks]) => (
                   <div key={employee} className="employee-card">
