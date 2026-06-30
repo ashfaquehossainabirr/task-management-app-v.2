@@ -1,9 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { createPortal } from "react-dom";
 import { useTasks } from "../context/TaskContext";
 import toast from "react-hot-toast";
 
 export default function EditTaskModal({ task, closeModal }) {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get(
+          "https://task-management-app-v-2.onrender.com/api/users",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        setUsers(Array.isArray(res.data) ? res.data : []);
+      } catch (error) {
+        console.error("Failed to fetch users", error);
+        setUsers([]);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   const { updateTask } = useTasks();
 
   const [form, setForm] = useState({
@@ -57,13 +82,21 @@ export default function EditTaskModal({ task, closeModal }) {
           />
 
           <label>Assigned to</label>
-          <input
+          <select
             value={form.assignedTo}
             required
             onChange={(e) =>
               setForm({ ...form, assignedTo: e.target.value })
             }
-          />
+          >
+            <option value="">Select Employee</option>
+
+            {users.map((user) => (
+              <option key={user._id} value={user.name}>
+                {user.name} ({user.role})
+              </option>
+            ))}
+          </select>
 
           <label>Priority</label>
           <select
