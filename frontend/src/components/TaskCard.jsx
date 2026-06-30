@@ -79,7 +79,7 @@ export default function TaskCard({ task }) {
         </p>
       )}
 
-      <p className={`status-${task.status}`}>
+      <p className={`status-${task.status}`} style={{ marginRight: "4px" }}>
         <strong>Status:</strong>{" "}
         {user.role === "employee" ? (
           <select
@@ -97,12 +97,12 @@ export default function TaskCard({ task }) {
         )}
       </p>
       
-      <p className={`priority-${task.priority}`}>
+      <p className={`priority-${task.priority}`} style={{ marginRight: "4px" }}>
         Priority: {task.priority}
       </p>
 
       {isOverdue && (
-        <span className="overdue-badge">⚠ Overdue</span>
+        <span className="overdue-badge" style={{ marginRight: "4px" }}>⚠ Overdue</span>
       )}
 
       {/* Admin + Manager only */}
