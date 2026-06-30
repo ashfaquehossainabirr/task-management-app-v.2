@@ -45,11 +45,13 @@ const centerTextPlugin = {
   },
 };
 
+/* ===============================
+   Date Helper
+================================ */
 const daysUntilDeadline = (deadline) => {
   const today = new Date();
   const due = new Date(deadline);
 
-  // Remove time difference issues
   today.setHours(0, 0, 0, 0);
   due.setHours(0, 0, 0, 0);
 
@@ -62,30 +64,51 @@ export default function EmployeeDashboard() {
   const { logout, user } = useAuth();
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-
-  /* ===============================
-     Filter State
-  ================================ */
   const [statusFilter, setStatusFilter] = useState("all");
 
   /* ===============================
-     Task Filtering
+     Assigned Tasks
   ================================ */
   const assignedTasks = tasks.filter(
     (task) => task.assignedTo === user.name
   );
 
-  const todoTasks = assignedTasks.filter((t) => t.status === "todo");
-  const inProgressTasks = assignedTasks.filter(
-    (t) => t.status === "in-progress"
+  /* ===============================
+     Task Lists (ARRAYS)
+  ================================ */
+  const todoTaskList = assignedTasks.filter(
+    (task) => task.status === "todo"
   );
-  const doneTasks = assignedTasks.filter((t) => t.status === "done");
 
+  const inProgressTaskList = assignedTasks.filter(
+    (task) => task.status === "in-progress"
+  );
+
+  const doneTaskList = assignedTasks.filter(
+    (task) => task.status === "done"
+  );
+
+  /* ===============================
+     Task Counts (NUMBERS)
+  ================================ */
+  const totalTasks = assignedTasks.length;
+  const todoTasks = todoTaskList.length;
+  const inProgressTasks = inProgressTaskList.length;
+  const doneTasks = doneTaskList.length;
+
+  /* ===============================
+     Filtered Tasks
+  ================================ */
   const filteredTasks =
     statusFilter === "all"
       ? assignedTasks
-      : assignedTasks.filter((task) => task.status === statusFilter);
+      : assignedTasks.filter(
+          (task) => task.status === statusFilter
+        );
 
+  /* ===============================
+     Urgent Tasks (≤ 3 Days)
+  ================================ */
   const urgentTasks = assignedTasks.filter((task) => {
     if (!task.deadline) return false;
 
@@ -101,8 +124,8 @@ export default function EmployeeDashboard() {
     datasets: [
       {
         data: [
-          doneTasks.length,
-          todoTasks.length + inProgressTasks.length,
+          doneTasks,
+          todoTasks + inProgressTasks,
         ],
         backgroundColor: ["#22c55e", "#f59e0b"],
         borderWidth: 4,
@@ -148,6 +171,31 @@ export default function EmployeeDashboard() {
       </div>
 
       {/* ===============================
+          Stats
+      ================================ */}
+      <div className="stats-container">
+        <div className="stat-card">
+          <h3>Total Tasks</h3>
+          <p>{totalTasks}</p>
+        </div>
+
+        <div className="stat-card todo">
+          <h3>To-Do</h3>
+          <p>{todoTasks}</p>
+        </div>
+
+        <div className="stat-card in-progress">
+          <h3>In Progress</h3>
+          <p>{inProgressTasks}</p>
+        </div>
+
+        <div className="stat-card done">
+          <h3>Done</h3>
+          <p>{doneTasks}</p>
+        </div>
+      </div>
+
+      {/* ===============================
           Chart + Pending Panel
       ================================ */}
       <section className="employee-chart-layout">
@@ -165,15 +213,17 @@ export default function EmployeeDashboard() {
         <div className="employee-task-panel">
           <h3>Pending Tasks</h3>
 
-          {[...todoTasks, ...inProgressTasks].length === 0 ? (
+          {[...todoTaskList, ...inProgressTaskList].length === 0 ? (
             <p className="empty-text">🎉 No pending tasks</p>
           ) : (
             <div className="employee-task-list">
-              {[...todoTasks, ...inProgressTasks].map((task) => (
+              {[...todoTaskList, ...inProgressTaskList].map((task) => (
                 <div key={task._id} className="employee-task-item">
                   <h4>{task.title}</h4>
                   <span className={`badge ${task.status}`}>
-                    {task.status === "todo" ? "To-Do" : "In-Progress"}
+                    {task.status === "todo"
+                      ? "To-Do"
+                      : "In-Progress"}
                   </span>
                 </div>
               ))}
@@ -198,7 +248,10 @@ export default function EmployeeDashboard() {
                   <div>
                     <h4>{task.title}</h4>
                     <p className="urgent-deadline">
-                      ⏰ {daysLeft === 0 ? "Due Today" : `Due in ${daysLeft} day(s)`}
+                      ⏰{" "}
+                      {daysLeft === 0
+                        ? "Due Today"
+                        : `Due in ${daysLeft} day(s)`}
                     </p>
                   </div>
 
@@ -251,7 +304,9 @@ export default function EmployeeDashboard() {
         </div>
       )}
 
-
+      {/* ===============================
+          Logout Confirm
+      ================================ */}
       {showLogoutConfirm && (
         <div
           className="modal-overlay"
