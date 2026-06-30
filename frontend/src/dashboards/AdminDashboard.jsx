@@ -415,7 +415,7 @@ export default function AdminDashboard() {
                   <div key={employee} className="employee-card">
                     <h4>👤 {employee}</h4>
 
-                    <div className="employee-stats deadline-list" style={{ overflowY: "auto", maxHeight: "268px", gap: "8px", paddingRight: "4px" }}>
+                    <div className="employee-stats deadline-list" style={{ overflowY: "auto", maxHeight: "130px", gap: "8px", paddingRight: "4px" }}>
                       {tasks.map(task => (
                         <div
                           key={task._id}
