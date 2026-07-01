@@ -64,13 +64,7 @@ export default function TaskDetailsModal({ task, closeModal }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h3 style={{ 
-            fontWeight: "bold", 
-            padding: "10px 30px", 
-            background: "#2563eb", 
-            color: "#fff", 
-            borderRadius: "6px" }             
-            }>Task Details</h3>
+          <h3 style={{ fontSize: "24px" }}>Task Details</h3>
           <button className="close-btn" onClick={closeModal}>
             ✕
           </button>
@@ -97,6 +91,11 @@ export default function TaskDetailsModal({ task, closeModal }) {
               </span>
             </p>
           )}
+
+          <p style={{ marginTop: "12px" }}>
+            <strong>Created At:</strong>{" "}
+            {new Date(task.createdAt).toLocaleString()}
+          </p>
         </div>
       </div>
     </div>,
