@@ -211,6 +211,20 @@ select {
   background: #b91c1c;
 }
 
+.view-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+.view-btn:hover {
+  background: #1d4ed8;
+}
+
 /* ===============================
    Responsive
 ================================ */

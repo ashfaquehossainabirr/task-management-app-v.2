@@ -4,6 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import EditTaskModal from "./EditTaskModal";
 import ConfirmModal from "./ConfirmModal";
+import TaskDetailsModal from "./TaskDetailsModal";
 import "./TaskCard.css";
 
 export default function TaskCard({ task }) {
@@ -11,6 +12,7 @@ export default function TaskCard({ task }) {
   const { user } = useAuth();
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
 
   const isOverdue =
     task.deadline &&
@@ -18,6 +20,7 @@ export default function TaskCard({ task }) {
     task.status !== "done";
 
   const canEdit = user.role === "admin" || user.role === "manager";
+  const isEmployee = user.role === "employee";
 
   const getRemainingDays = (deadline) => {
     if (!deadline) return null;
@@ -118,6 +121,25 @@ export default function TaskCard({ task }) {
           >
             Delete
           </button>
+
+          <button
+            className="view-btn"
+            onClick={() => setShowDetails(true)}
+          >
+            View Details
+          </button>
+        </div>
+      )}
+
+      {/* Employee only */}
+      {isEmployee && (
+        <div className="task-actions">
+          <button
+            className="view-btn"
+            onClick={() => setShowDetails(true)}
+          >
+            View Details
+          </button>
         </div>
       )}
 
@@ -145,6 +167,13 @@ export default function TaskCard({ task }) {
               setShowDeleteConfirm(false);
             }
           }}
+        />
+      )}
+
+      {showDetails && (
+        <TaskDetailsModal
+          task={task}
+          closeModal={() => setShowDetails(false)}
         />
       )}
     </div>
