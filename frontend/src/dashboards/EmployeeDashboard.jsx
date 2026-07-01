@@ -59,6 +59,26 @@ const daysUntilDeadline = (deadline) => {
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
+/* ===============================
+   Weekly Date Helpers
+================================ */
+const getWeekRange = () => {
+  const today = new Date();
+  const day = today.getDay(); // 0 (Sun) → 6 (Sat)
+
+  const diffToMonday = day === 0 ? -6 : 1 - day;
+
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() + diffToMonday);
+  startOfWeek.setHours(0, 0, 0, 0);
+
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+  endOfWeek.setHours(23, 59, 59, 999);
+
+  return { startOfWeek, endOfWeek };
+};
+
 export default function EmployeeDashboard() {
   const { tasks } = useTasks();
   const { logout, user } = useAuth();
@@ -72,6 +92,33 @@ export default function EmployeeDashboard() {
   const assignedTasks = tasks.filter(
     (task) => task.assignedTo === user.name
   );
+
+  /* ===============================
+    Weekly Progress
+  ================================ */
+  const { startOfWeek, endOfWeek } = getWeekRange();
+
+  const weeklyTasks = assignedTasks.filter((task) => {
+    if (!task.createdAt) return false;
+
+    const createdDate = new Date(task.createdAt);
+    return createdDate >= startOfWeek && createdDate <= endOfWeek;
+  });
+
+  const weeklyDone = weeklyTasks.filter(
+    (task) => task.status === "done"
+  ).length;
+
+  const weeklyPending = weeklyTasks.filter(
+    (task) => task.status !== "done"
+  ).length;
+
+  const weeklyTotal = weeklyTasks.length;
+
+  const weeklyCompletion =
+    weeklyTotal === 0
+      ? 0
+      : Math.round((weeklyDone / weeklyTotal) * 100);
 
   /* ===============================
      Task Lists (ARRAYS)
@@ -264,6 +311,36 @@ export default function EmployeeDashboard() {
           </div>
         </section>
       )}
+
+      {/* ===============================
+          Weekly Progress Summary
+      ================================ */}
+      <section className="weekly-summary">
+        <h3>📅 Weekly Progress Summary</h3>
+
+        {weeklyTotal === 0 ? (
+          <p className="empty-text">
+            No tasks created this week
+          </p>
+        ) : (
+          <div className="weekly-cards">
+            <div className="weekly-card done">
+              <h4>Completed</h4>
+              <p>{weeklyDone}</p>
+            </div>
+
+            <div className="weekly-card pending">
+              <h4>Pending</h4>
+              <p>{weeklyPending}</p>
+            </div>
+
+            <div className="weekly-card percent">
+              <h4>Completion</h4>
+              <p>{weeklyCompletion}%</p>
+            </div>
+          </div>
+        )}
+      </section>
 
       {/* ===============================
           Filter Buttons
